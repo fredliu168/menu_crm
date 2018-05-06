@@ -1,0 +1,9 @@
+.Python
+__pycache__/
+*.py[cod]
+*$py.class
+.idea
+doc
+upload
+__pycache__
+projectFilesBackup

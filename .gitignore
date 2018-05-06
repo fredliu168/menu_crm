@@ -1,0 +1,9 @@
+.Python
+__pycache__/
+*.py[cod]
+*$py.class
+.idea
+avatar
+upload/images/room/
+upload/images/avatar/
+projectFilesBackup
