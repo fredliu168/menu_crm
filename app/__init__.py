@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-
-
 from flask import Flask, Response, jsonify
 from flask_bootstrap import Bootstrap
-
-
 from app.model.mysql import *
 from config import config
 
@@ -34,12 +30,11 @@ def create_app(config_name):
     Bootstrap(app)
 
     #print(app.config)
-
     from .main import main as main_blueprint
-
     from .api_1_0 import api as api_1_0_blueprint
 
     app.register_blueprint(main_blueprint)
+    #app.register_blueprint(api_1_0_blueprint, url_prefix='/api_1_0/v1.0')
     app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
 
     return app

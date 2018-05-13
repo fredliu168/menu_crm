@@ -283,7 +283,8 @@ number   int --编号
 ## order_items 订单清单信息
 ```
    id           int --自增id
-   item_sha_id  varchar(32) md5(table_no+post_time+title) 
+   item_sha_id  varchar(32) --MD5(post_time+str(orderItem.num )+str(orderItem.price)+orderItem.title+orderItem.food_sha_id)
+   food_sha_id  varchar(32) -- 菜品id
    title        varchar(256) -- 菜品标题  
    num          int     -- 数量
    price        float -- 价格 

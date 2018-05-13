@@ -174,6 +174,17 @@ class MysqlManager(object):
 
         return result
 
+    def exec_sqls(self, sql_list):
+        self._connect_db()
+        try:
+            for sql in sql_list:
+                self.__cursor.execute(sql)
+            self.__connect.commit()
+        except Exception as error:
+            print(error)
+            self.__connect.rollback()
+        self._close_db()
+
     def add(self, sql, params):
         """
         执行添加操作

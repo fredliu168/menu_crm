@@ -11,23 +11,26 @@ CREATE TABLE `menu_type` (
   UNIQUE KEY `title` (`title`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='菜单分类';
 
-
+-- ----------------------------
+-- Table structure for foods
+-- ----------------------------
+DROP TABLE IF EXISTS `foods`;
 CREATE TABLE `foods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sha_id` varchar(32) NOT NULL DEFAULT '',
   `title` varchar(256) NOT NULL DEFAULT '' COMMENT '标题',
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
   `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
-  `price` float NOT NULL DEFAULT '0' COMMENT '价格',
+  `price` float unsigned NOT NULL DEFAULT '0' COMMENT '价格',
   `discount_price` float DEFAULT NULL COMMENT '折扣价',
-  `Unit` varchar(36) DEFAULT NULL COMMENT '计量单位 份/瓶',
-  `total_num` int(11) NOT NULL DEFAULT '1' COMMENT '总库存',
+  `unit` varchar(36) DEFAULT NULL COMMENT '计量单位 份/瓶',
+  `total_num` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '总库存',
   `description` varchar(10240) DEFAULT NULL COMMENT '其他描述信息',
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`),
   KEY `sha_id` (`sha_id`),
   KEY `sha_id_index` (`sha_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜品';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='菜品';
 
 
 CREATE TABLE `menutype_foods` (
@@ -60,9 +63,14 @@ CREATE TABLE `foods_order` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单信息';
 
+-- ----------------------------
+-- Table structure for order_items
+-- ----------------------------
+DROP TABLE IF EXISTS `order_items`;
 CREATE TABLE `order_items` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `item_sha_id` varchar(32) DEFAULT NULL,
+  `food_sha_id` varchar(32) DEFAULT '' COMMENT '菜品sha_id',
   `title` varchar(256) DEFAULT NULL COMMENT '菜品标题',
   `price` float DEFAULT NULL COMMENT '价格',
   `post_time` datetime DEFAULT NULL COMMENT '发送时间',
@@ -70,6 +78,19 @@ CREATE TABLE `order_items` (
   PRIMARY KEY (`id`),
   KEY `item_sha_id` (`item_sha_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单详情';
+
+
+-- ----------------------------
+-- Table structure for foods_order_items
+-- ----------------------------
+DROP TABLE IF EXISTS `foods_order_items`;
+CREATE TABLE `foods_order_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_sha_id` varchar(32) NOT NULL COMMENT '订单sha_id',
+  `item_sha_id` varchar(32) DEFAULT NULL COMMENT '定的菜品id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

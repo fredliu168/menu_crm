@@ -168,7 +168,7 @@ DELETE /table/<sha_id>
 POST /order
 ```
 {
- "table_sha_id":"823e85a22dd0615d384ea41c95b36bba", #餐桌id
+ "table_sha_id":"31d35b09fed59da6f5b266cb9943e27d", #餐桌id
  "user_sha_id":"5ba73254e39b2e129de7539aaed43930", # 用户信息
  "description":"test", # 描述信息
  "foods":[

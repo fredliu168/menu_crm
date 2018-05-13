@@ -8,7 +8,6 @@ from flask import request
 获取菜单分类
 """
 
-
 @api.route("/menu-type", methods=['GET'])
 def get_menutype():
     result = {"code": 10000, "value": "", "msg": ""}
@@ -34,7 +33,7 @@ def get_menutype():
 def menutype_add():
     result = {"code": 10000, "value": "", "msg": "添加成功"}
     data = request.data
-    data_dict = json.loads(data)
+    data_dict = json.loads(data.decode('utf-8'))
 
     data_dict['sha_id'] = util.MD5(data_dict['title'])
 

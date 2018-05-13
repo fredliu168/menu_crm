@@ -11,6 +11,7 @@ class OrderItem(object):
 
     def __init__(self):
         self.item_sha_id = ''
+        self.food_sha_id = ''
         self.title = ''
         self.price = 0
         self.num = 0
@@ -24,3 +25,5 @@ class OrderItem(object):
         print(self.title)
         print(self.price)
         print(self.num)
+        print(self.food_sha_id)
+        print(self.item_sha_id)

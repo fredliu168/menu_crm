@@ -36,7 +36,7 @@ def get_foods():
 def foods_add():
     result = {"code": 10000, "value": "", "msg": "添加成功"}
     data = request.data
-    data_dict = json.loads(data)
+    data_dict = json.loads(data.decode('utf-8'))
 
     data_dict['sha_id'] = util.MD5(data_dict['title'])
 
