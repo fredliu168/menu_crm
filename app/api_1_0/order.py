@@ -76,16 +76,18 @@ def order_add():
         sql_list.append(sql)
 
         sql_items = '''insert into order_items(item_sha_id,food_sha_id,title,price,post_time,num)
- values ('{item_sha_id}','{food_sha_id}','{title}',{price},'{post_time}',{num})'''.format(item_sha_id=orderItem.item_sha_id,
-                                                                                  food_sha_id=orderItem.food_sha_id,
-                                                                                  title=orderItem.title,
-                                                                                  price=orderItem.price,
-                                                                                  post_time=orderItem.post_time,
-                                                                                  num=orderItem.num)
+ values ('{item_sha_id}','{food_sha_id}','{title}',{price},'{post_time}',{num})'''.format(
+            item_sha_id=orderItem.item_sha_id,
+            food_sha_id=orderItem.food_sha_id,
+            title=orderItem.title,
+            price=orderItem.price,
+            post_time=orderItem.post_time,
+            num=orderItem.num)
 
         print(sql_items)
         sql_list.append(sql_items)
 
-        sql_oder_items = '''insert into foods_order_items(order_sha_id,item_sha_id) values ('{order_sha_id}','{item_sha_id}')'''.format(order_sha_id='',item_sha_id='')
+        sql_oder_items = '''insert into foods_order_items(order_sha_id,item_sha_id) values ('{order_sha_id}','{item_sha_id}')'''.format(
+            order_sha_id='', item_sha_id='')
 
     return result

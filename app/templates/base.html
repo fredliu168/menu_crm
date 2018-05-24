@@ -4,9 +4,11 @@
 
 {% block head %}
 {{ super() }}
-<link rel="shortcut icon" href="" type="image/x-icon">
-<link rel="icon" href="" type="image/x-icon">
-<link rel="stylesheet" type="text/css" href="">
+    <link rel="shortcut icon" href="" type="image/x-icon">
+    <link rel="icon" href="" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="//unpkg.com/element-ui/lib/theme-chalk/index.css">
 {% endblock %}
 
 {% block navbar %}
@@ -52,8 +54,35 @@
 </div>
 {% endblock %}
 
+{% block content %}
+    <div class="container">
 
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="main-content">
+            {% block page_content %}{% endblock %}
+        </div>
+    </div>
+
+    <footer>
+        <div class="container" style="padding-top: 10px">
+
+            <p>&copy; 2017 <i class="fa fa-code"></i> powered by
+                liubaiyi
+            </p>
+
+        </div>
+    </footer>
+{% endblock %}
 
 {% block scripts %}
 {{ super() }}
+    <!-- import Vue before Element -->
+    <script src="//unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="//unpkg.com/element-ui/lib/index.js"></script>
 {% endblock %}

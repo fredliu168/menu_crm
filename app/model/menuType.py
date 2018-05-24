@@ -17,6 +17,9 @@ class MenuType(object):
         self.type_index = 0
         self.modify_time = ''
 
+    def delete(self, sha_id):
+        condition = {'sha_id': sha_id}
+        dbManager.delete('menu_type', condition)
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,

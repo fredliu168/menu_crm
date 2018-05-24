@@ -8,6 +8,7 @@ from flask import request
 获取菜单分类
 """
 
+
 @api.route("/menu-type", methods=['GET'])
 def get_menutype():
     result = {"code": 10000, "value": "", "msg": ""}
@@ -93,10 +94,14 @@ def menutype_modify(sha_id):
 def menutype_del(sha_id):
     result = {"code": 10000, "value": "", "msg": "删除成功"}
 
-    condition = {'sha_id': sha_id}
+    menuType = MenuType()
+    #condition = {'sha_id': sha_id}
 
     try:
-        dbManager.delete('menu_type', condition)
+        #dbManager.delete('menu_type', condition)
+
+        menuType.delete(sha_id=sha_id)
+
     except Exception as ex:
 
         code, err_message = ex.args

@@ -28,3 +28,5 @@ chmod 777 * -R
 :/etc/nginx/sites-available# vim default
 
 ```
+拷贝日志文件
+docker cp  destoon_docker_www_1:/var/log/apache2/error.log /Volumes/SDCard/www/dhbmw/
