@@ -3,7 +3,7 @@
 {% block title %}Flasky{% endblock %}
 
 {% block head %}
-{{ super() }}
+    {{ super() }}
     <link rel="shortcut icon" href="" type="image/x-icon">
     <link rel="icon" href="" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="">
@@ -12,46 +12,45 @@
 {% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-inverse" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">Flasky</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="">Home</a></li>
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('main.foods_index') }}">Flasky</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('main.menu_type_index') }}">菜单配置</a></li>
+                    <li><a href="{{ url_for('main.foods_index') }}">菜品配置</a></li>
 
-                <li><a href="">Profile</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
 
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
+                    <li><a href="">Moderate Comments</a></li>
 
-                <li><a href="">Moderate Comments</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="">
+                            Account <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="">Change Password</a></li>
+                            <li><a href="">Change Email</a></li>
+                            <li><a href="">Log Out</a></li>
+                        </ul>
+                    </li>
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="">
-                        Account <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="">Change Password</a></li>
-                        <li><a href="">Change Email</a></li>
-                        <li><a href="">Log Out</a></li>
-                    </ul>
-                </li>
+                    <li><a href="">Log In</a></li>
 
-                <li><a href="">Log In</a></li>
-
-            </ul>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block content %}
@@ -80,7 +79,10 @@
 {% endblock %}
 
 {% block scripts %}
-{{ super() }}
+    {{ super() }}
+    <script src="/static/js/base/json2.js"></script>
+    <script src="/static/js/base/jquery.json.js"></script>
+    <script src="/static/js/base/ajax-helper.js"></script>
     <!-- import Vue before Element -->
     <script src="//unpkg.com/vue/dist/vue.js"></script>
     <!-- import JavaScript -->

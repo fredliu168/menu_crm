@@ -4,6 +4,7 @@ from flask_bootstrap import Bootstrap
 from app.model.mysql import *
 from config import config
 
+
 # print('default')
 # print(config.config['default'])
 
@@ -12,6 +13,8 @@ from config import config
 #                          port=config.Config.mysql_port)
 
 dbManager = MysqlManager()
+
+
 
 class MyResponse(Response):
     @classmethod

@@ -46,6 +46,21 @@ left join `foods` f on mf.`foods_sha_id`=f.sha_id order by m.`type_index` desc,m
     return result
 
 
+@api.route("/food-type/<menu_sha_id>", methods=['GET'])
+def get_menutype_foods_sha_id(menu_sha_id):
+    result = {"code": 10000, "value": "", "msg": ""}
+    sql = """select f.*  from menutype_foods mf left join `menu_type` m on mf.`menu_sha_id` = m.sha_id 
+left join `foods` f on mf.`foods_sha_id`=f.sha_id where m.sha_id = '{menu_sha_id} ' order by mf.`index` """.format(
+        menu_sha_id=menu_sha_id)
+
+    menu_types_foods = dbManager.exec_sql(sql)
+
+    result["value"] = menu_types_foods
+    result["msg"] = "获取数据成功"
+
+    return result
+
+
 """
 添加
 {

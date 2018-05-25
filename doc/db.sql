@@ -1,36 +1,40 @@
 -- 20189426
 
+-- 菜单分类
 CREATE TABLE `menu_type` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) NOT NULL DEFAULT '' COMMENT '菜单分类名称 ',
   `image_id` varchar(128) DEFAULT NULL COMMENT '分类图片id',
-  `type_index` int(11) unsigned DEFAULT '0' COMMENT '菜单分类排序',
+  `type_index` int(11) unsigned DEFAULT '100' COMMENT '菜单分类排序',
   `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
   `sha_id` varchar(32) NOT NULL DEFAULT '' COMMENT '菜单md5(title)值',
+  `pingyin` varchar(128) DEFAULT NULL COMMENT '菜单拼音',
+  `pingyin_first` varchar(20) DEFAULT NULL COMMENT '拼音第一个字母',
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='菜单分类';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='菜单分类';
 
 -- ----------------------------
 -- Table structure for foods
 -- ----------------------------
-DROP TABLE IF EXISTS `foods`;
 CREATE TABLE `foods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sha_id` varchar(32) NOT NULL DEFAULT '',
   `title` varchar(256) NOT NULL DEFAULT '' COMMENT '标题',
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
   `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
-  `price` float unsigned NOT NULL DEFAULT '0' COMMENT '价格',
+  `price` float NOT NULL DEFAULT '0' COMMENT '价格',
   `discount_price` float DEFAULT NULL COMMENT '折扣价',
   `unit` varchar(36) DEFAULT NULL COMMENT '计量单位 份/瓶',
-  `total_num` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '总库存',
+  `total_num` int(11) NOT NULL DEFAULT '1' COMMENT '总库存',
   `description` varchar(10240) DEFAULT NULL COMMENT '其他描述信息',
+  `food_index` int(11) DEFAULT '100' COMMENT '排序',
+  `states` int(11) DEFAULT '1' COMMENT '是否上架销售 0下架 1 上架',
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`),
   KEY `sha_id` (`sha_id`),
   KEY `sha_id_index` (`sha_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='菜品';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='菜品';
 
 
 CREATE TABLE `menutype_foods` (

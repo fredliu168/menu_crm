@@ -36,6 +36,11 @@ def menutype_add():
     data = request.data
     data_dict = json.loads(data.decode('utf-8'))
 
+    if data_dict =={} or len(data_dict['title'].strip()) == 0:
+        result['code'] = -10000
+        result['msg'] = "菜单名称不能为空"
+        return result
+
     data_dict['sha_id'] = util.MD5(data_dict['title'])
 
     cols = data_dict.keys()
@@ -68,6 +73,7 @@ def menutype_modify(sha_id):
 
     data = request.data
     data_dict = json.loads(data)
+    print(data_dict)
 
     data_dict['sha_id'] = util.MD5(data_dict['title'])
 

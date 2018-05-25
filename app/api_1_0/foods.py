@@ -8,6 +8,8 @@ from flask import request
 """
 获取foods
 """
+
+
 @api.route("/food", methods=['GET'])
 def get_foods():
     result = {"code": 10000, "value": "", "msg": ""}
@@ -19,6 +21,27 @@ def get_foods():
     result["msg"] = "获取数据成功"
 
     return result
+
+
+@api.route("/food/<sha_id>/<enable>", methods=['GET'])
+def enable_foods(sha_id, enable):
+    """
+
+    :param sha_id:
+    :param enable:
+    :return:
+    """
+    result = {"code": 10000, "value": "", "msg": ""}
+
+    sql = """update foods set states = {state} where sha_id={sha_id}""".format(state=enable, sha_id=sha_id)
+
+    food = dbManager.exec_sql(sql)
+
+    result["value"] = food
+    result["msg"] = "获取数据成功"
+
+    return result
+
 
 """
 添加
@@ -37,6 +60,30 @@ def foods_add():
     result = {"code": 10000, "value": "", "msg": "添加成功"}
     data = request.data
     data_dict = json.loads(data.decode('utf-8'))
+
+    print(data_dict)
+
+    print(data_dict.keys)
+
+    if data_dict == {} or "title" not in data_dict or len(data_dict['title'].strip()) == 0:
+        result['code'] = -10000
+        result['msg'] = "名称不能为空"
+        return result
+
+    if "price" not in data_dict:
+        result['code'] = -10000
+        result['msg'] = "价格不能为空"
+        return result
+
+    if "total_num" not in data_dict:
+        result['code'] = -10000
+        result['msg'] = "数量不能为空"
+        return result
+
+    if "unit" not in data_dict:
+        result['code'] = -10000
+        result['msg'] = "单位不能为空"
+        return result
 
     data_dict['sha_id'] = util.MD5(data_dict['title'])
 
@@ -70,6 +117,26 @@ def foods_modify(sha_id):
 
     data = request.data
     data_dict = json.loads(data)
+
+    if data_dict == {} or "title" not in data_dict or len(data_dict['title'].strip()) == 0:
+        result['code'] = -10000
+        result['msg'] = "名称不能为空"
+        return result
+
+    if "price" not in data_dict:
+        result['code'] = -10000
+        result['msg'] = "价格不能为空"
+        return result
+
+    if "total_num" not in data_dict:
+        result['code'] = -10000
+        result['msg'] = "数量不能为空"
+        return result
+
+    if "unit" not in data_dict:
+        result['code'] = -10000
+        result['msg'] = "单位不能为空"
+        return result
 
     data_dict['sha_id'] = util.MD5(data_dict['title'])
 

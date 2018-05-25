@@ -150,6 +150,8 @@ class MysqlManager(object):
         else:
             sql = "update {table} set {values}".format(table=table, values=update_data)
 
+        sql = sql.replace('None', 'NULL')
+
         print(sql)
 
         self.__cursor.execute(sql)
