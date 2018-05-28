@@ -44,7 +44,12 @@
 {% block page_content %}
 
     <div id="app">
-        {% raw %}
+
+    {% include 'foods-img-upload-dlg.html' %}
+   {% raw %}
+
+
+
         <div style="margin-top: 5px;margin-bottom: 5px;">
             <el-row :gutter="20">
 
@@ -69,7 +74,7 @@
                     <div class="grid-content bg-purple">
 
                         <el-button @click="onCreateDialog" class="btn btn-default">
-                            <span class="glyphicon glyphicon-plus"></span> 添加
+                            <span class="glyphicon glyphicon-plus"></span> 新增
                         </el-button>
                         <el-dialog title="配置信息" :visible.sync="dialogFormVisible">
                             <el-form :model="form">
@@ -109,7 +114,7 @@
                                     <el-input v-model="form.food_index" auto-complete="off"></el-input>
                                 </el-form-item>
 
-                                <el-form-item label="备注信息:" :label-width="formLabelWidth">
+                                <el-form-item label="详细描述:" :label-width="formLabelWidth">
                                     <el-input type="textarea" v-model="form.description" auto-complete="off"></el-input>
                                 </el-form-item>
 
@@ -181,12 +186,6 @@
                         label="单位">
                 </el-table-column>
 
-
-                <el-table-column
-                        prop="sha_id"
-                        label="哈希值">
-                </el-table-column>
-
                 <el-table-column
                         prop="food_index"
                         label="排序">
@@ -194,10 +193,10 @@
 
                 <el-table-column
                         prop="description"
-                        label="备注">
+                        label="详细描述">
                 </el-table-column>
                  <el-table-column
-                        label="是否上架"
+                        label="上架"
                         width="100">
                     <template slot-scope="scope">
                         <el-switch
@@ -217,6 +216,7 @@
                     <template slot-scope="scope">
                         <el-button @click="showCheckDel(scope.row)" type="text" size="small">删除</el-button>
                         <el-button @click="onEdit(scope.row)" type="text" size="small">编辑</el-button>
+                        <el-button @click="onCrateImgDlg(scope.row)" type="text" size="small">上传图片</el-button>
                     </template>
                 </el-table-column>
 

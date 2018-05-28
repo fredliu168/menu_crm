@@ -8,52 +8,44 @@ import os
 import requests
 from flask import current_app
 
-from app import util
 from .. import dbManager
+from .. import util
+import time
 
 
-class RoomImage():
+class Image(object):
 
     def __init__(self):
-        self.room_sha_identity = ''  # 房屋sha_identity外键
+        self.food_sha_identity = ''  # 房屋sha_identity外键
+        self.sha_id = ''  # 图片sha_id
         self.name = ''  # 图片名称
         self.post_time = ''  # 上传照片时间
         self.path = ''  # 图片存放路径
-        self.url= ''
 
-    def _fetch(self):
-        # 保存房产图片到本地目录
 
-        url_path, img_name = os.path.split(self.name)
-        room_img_name = "{image_name}.{type}".format(image_name=util.MD5(self.name), type=img_name.split('.')[1])
-        # 保存图像到本地
-        image_save_path = '{}/{}/{}'.format(current_app.config['ROOM_IMG_DIR'], self.post_time.split(' ')[0], room_img_name)
-        # 创建保存路径
-        util.mkdir('{}/{}'.format(current_app.config['ROOM_IMG_DIR'], self.post_time.split(' ')[0]))
 
-        self.url = self.name
-        ret = requests.get(self.name)
+    def setFoodImg(self, food_sha_id):
+        # 保存到物品图片
+        self.sha_id = util.MD5(self.path)
+        dbManager.insert('food_images', insert_data=[
+            {"food_sha_id": food_sha_id, "img_sha_id": self.sha_id}])
 
-        if ret.status_code == 200:
-            with open(image_save_path, 'wb') as file:
-                file.write(ret.content)
-            self.name = room_img_name
-            self.path = "{}/{}".format(self.post_time.split(' ')[0], room_img_name)
-            return True
+    def getImg(self, sha_id):
+        sql = """select * from images t where t.sha_id='{sha_id}'""".format(sha_id=sha_id)
 
-        self.name = ''
-        return False
+        _image = dbManager.exec_sql(sql)
 
-    def _saveDb(self):
+        if len(_image) > 0:
+            return _image[0]["path"]
+        return None
+
+    def saveDb(self):
+        self.sha_id = util.MD5(self.path)
+        self.post_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         # 保存内容到数据库
-        dbManager.insert('image', insert_data=[
-            {"room_sha_identity": self.room_sha_identity, "name": self.name, "post_time": self.post_time,
-             "path": self.path,"url":self.url}])
-
-    def save(self):
-        # 把图片保存本地,相关字段保存到数据库
-        self._fetch()
-        self._saveDb()
+        dbManager.insert('images', insert_data=[
+            {"sha_id": self.sha_id, "post_time": self.post_time,
+             "path": self.path}])
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,

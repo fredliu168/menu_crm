@@ -1,0 +1,113 @@
+{% raw %}
+<el-dialog title="配置信息" :visible.sync="dialogFormVisible_add_foods">
+    <div style="max-height: 550px;overflow-y: auto;position: relative;  padding: 5px;">
+
+
+        <template>
+            <el-table
+                    :data="items"
+                    style="width: 100%">
+
+                <el-table-column
+                        prop="id"
+                        label="#"
+                        width="60">
+                </el-table-column>
+
+                <el-table-column
+                        prop="title"
+                        label="名称">
+                </el-table-column>
+
+                <el-table-column
+                        prop="price"
+                        label="价格(元)">
+                </el-table-column>
+
+                <el-table-column
+                        prop="total_num"
+                        label="数量">
+                </el-table-column>
+
+                <el-table-column
+                        prop="unit"
+                        label="单位">
+                </el-table-column>
+
+                <el-table-column
+                        label="加入该分类">
+                    <template slot-scope="scope">
+                        <el-switch
+                                v-model="scope.row.flag>0?true:false"
+                                on-text=""
+                                off-text=""
+                                @change="switchType(scope.row)"
+                        >
+                        </el-switch>
+                    </template>
+                </el-table-column>
+
+            </el-table>
+        </template>
+        <div class="icon-addon addon-md" style="margin-bottom: 20px">
+            <el-input type="text" placeholder="搜索过滤"
+                      v-model="search_keyword" icon="search">
+            </el-input>
+        </div>
+
+        <template>
+            <el-table
+                    :data="un_select_items"
+                    style="width: 100%">
+
+                <el-table-column
+                        prop="id"
+                        label="#"
+                        width="60">
+                </el-table-column>
+
+                <el-table-column
+                        prop="title"
+                        label="名称">
+                </el-table-column>
+
+                <el-table-column
+                        prop="price"
+                        label="价格(元)">
+                </el-table-column>
+
+
+                <el-table-column
+                        prop="total_num"
+                        label="数量">
+                </el-table-column>
+
+                <el-table-column
+                        prop="unit"
+                        label="单位">
+                </el-table-column>
+
+                <el-table-column
+                        label="加入该分类">
+                    <template slot-scope="scope">
+                        <el-switch
+                                v-model="scope.row.flag>0?true:false"
+                                on-text=""
+                                off-text=""
+                                @change="switchType(scope.row)"
+                        >
+                        </el-switch>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </template>
+
+    </div>
+
+
+    <div slot="footer" class="dialog-footer">
+
+        <el-button type="primary" @click="CloseDlg">关闭</el-button>
+    </div>
+</el-dialog>
+{% endraw %}

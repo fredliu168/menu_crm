@@ -3,7 +3,9 @@ new Vue({
     el: '#app',
 
     data: {
+        type_sha_id:'',
         search_keyword: '',
+        dialogFormVisible_add_foods: false,
         del_check_visible: false,
         dialogFormVisible: false,
         formLabelWidth: '150px',
@@ -11,14 +13,16 @@ new Vue({
         form: {},
         delItem: {},//要被删除的
         apiUrl: '/api/v1.0/food-type',
+        apiFood: '/api/v1.0/food',
         items: [{'sql_id': 1}],
+        un_select_items: [],
         len: 0,
         unit_options: [{ //单位选项
-          value: '份',
-          label: '份'
+            value: '份',
+            label: '份'
         }, {
-          value: '瓶',
-          label: '瓶'
+            value: '瓶',
+            label: '瓶'
         }],
     },
     mounted: function () {
@@ -35,6 +39,104 @@ new Vue({
 
     methods: {
 
+        //归类物品
+        CloseDlg: function () {
+            this.dialogFormVisible_add_foods = false;
+        },
+        onCreateDialog_add_foods: function () {
+            this.dialogFormVisible_add_foods = true;
+
+            this.getUNSelectFoods(this.type_sha_id);
+        },
+
+        switchChange: function (row) {
+            console.log(row.states);
+
+            if (row.states == 1) {
+                row.states = 0;
+            } else {
+                row.states = 1;
+            }
+
+            this.updateStates(row.sha_id, row.states);
+        },
+
+        getUNSelectFoods: function (type_sha_id) {//获取未分类物品
+            var vm = this;
+            $request.get(vm.apiUrl + '/un/' + type_sha_id, null, function (data) {
+
+                vm.un_select_items = data.value;
+                return vm.un_select_items;
+            }, function (error_data) {
+                console.log(error_data);
+            })
+
+        },
+        switchType: function (row) {
+            //进行归类
+            if (row.flag == 1) {
+                row.flag = 0;
+                this.delTypeFoods(row.m_sha_id);
+            } else {
+                row.flag = 1;
+
+                this.addTypeFoods(row.sha_id, this.type_sha_id);
+            }
+        }
+        ,
+        delTypeFoods: function (m_sha_id) {
+        //从该分类中删除
+              var vm = this;
+
+              $request.del(this.apiUrl + '/' + m_sha_id, null, function (data) {
+                console.log(data);
+                vm.$message(data.msg);
+                vm.getUNSelectFoods(vm.type_sha_id); //重新获取数据
+                vm.getFoods(vm.type_sha_id);
+            }, function (error_data) {
+                console.log(error_data);
+                vm.$message.error(error_data.msg.substring(0, 120));
+            })
+          }
+        ,
+
+        addTypeFoods: function (food_sha_id, menuType_sha_id) {
+
+            var vm = this;
+
+            var temp = {};
+            temp.menu_sha_id = menuType_sha_id;
+            temp.foods_sha_id = food_sha_id;
+
+            $request.post(this.apiUrl, temp, function (data) {
+                var json_target = new JSONFormat(JSON.stringify(data), 4).toString();
+                console.log(json_target);
+                vm.getUNSelectFoods(vm.type_sha_id); //重新获取数据
+                vm.getFoods(vm.type_sha_id);
+                vm.$message('添加成功');
+
+
+            }, function (error_data) {
+                var json_target = new JSONFormat(JSON.stringify(error_data), 4).toString();
+                vm.$message.error(error_data.msg.substring(0, 120));
+            });
+        },
+
+        //
+
+        updateStates: function (sha_id, state) {
+            //更新状态
+
+            var vm = this;
+            $request.get(vm.apiFood + '/' + sha_id + '/' + state, null, function (data) {
+                vm.$message(data.msg);
+
+            }, function (error_data) {
+                vm.$message.error(error_data.msg.substring(0, 120));
+            })
+
+        },
+
         dlgOk: function (form) {
             var vm = this;
             console.log(form.app_id);
@@ -50,10 +152,10 @@ new Vue({
             if (form.edit == 'add') {
 
                 console.log('添加');
-                $request.post(this.apiUrl, temp, function (data) {
+                $request.post(this.apiFood, temp, function (data) {
                     var json_target = new JSONFormat(JSON.stringify(data), 4).toString();
                     console.log(json_target);
-                    vm.getFoods(); //重新获取数据
+                     vm.getFoods(vm.type_sha_id); //重新获取数据
                     vm.$message('添加成功');
                     vm.dialogFormVisible = false;
 
@@ -62,15 +164,14 @@ new Vue({
                     vm.$message.error(error_data.msg.substring(0, 120));
                 });
 
-            }else if(form.edit =='modify')
-            {
+            } else if (form.edit == 'modify') {
                 temp.sha_id = form.sha_id;
                 console.log('修改');
                 console.log(temp.sha_id);
-                $request.put(this.apiUrl+'/'+temp.sha_id, temp, function (data) {
-                   var json_target = new JSONFormat(JSON.stringify(data), 4).toString();
+                $request.put(this.apiFood + '/' + temp.sha_id, temp, function (data) {
+                    var json_target = new JSONFormat(JSON.stringify(data), 4).toString();
                     console.log(json_target);
-                    vm.getFoods(); //重新获取数据
+                     vm.getFoods(vm.type_sha_id); //重新获取数据
                     vm.$message('修改成功');
                     vm.dialogFormVisible = false;
 
@@ -89,7 +190,7 @@ new Vue({
             this.form = {
                 ok: '添加',
                 edit: 'add',
-                food_index :100
+                food_index: 100
             };
         }
         ,
@@ -114,7 +215,6 @@ new Vue({
             this.form.edit = 'modify';
 
 
-
         }
         ,
 
@@ -135,7 +235,7 @@ new Vue({
 
         getFoods: function (type_sha_id) {
             var vm = this;
-            $request.get(vm.apiUrl+'/'+type_sha_id, null, function (data) {
+            $request.get(vm.apiUrl + '/' + type_sha_id, null, function (data) {
 
                 vm.len = data.value.length;
                 console.log(data.value);

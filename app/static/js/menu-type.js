@@ -106,35 +106,38 @@ new Vue({
             })
         },
 
+        showMenuFoods:function(row){
+
+
+              this.$router.push('/menu-type-foods/'+ row.sha_id);
+        },
+
         getMenuTypes: function () {
             var vm = this;
             $request.get(vm.apiUrl, null, function (data) {
 
                 vm.len = data.value.length;
                 console.log(data.value);
-                // var _apps = new Array();
-                //  var apps = data.value.apps;
-                // for (index in apps) {
-                //     //console.log(index)
-                //     //   console.log(data.value[index].app_name)
-                //     var temp = {};
-                //     temp.id = apps[index].id;
-                //
-                //     temp.app_name = apps[index].app_name;
-                //     temp.value = apps[index].app_name;
-                //     temp.app_sql_url = '<a href="/app-sql/' + apps[index].app_id + '">' + apps[index].app_name + '</a>';
-                //     temp.app_id = apps[index].app_id;
-                //     temp.test_appid = apps[index].test_appid;
-                //     temp.app_secretkey = apps[index].app_secretkey;
-                //     temp.test_secretkey = apps[index].test_secretkey;
-                //     _apps.push(temp);
-                // }
-                //
-                // console.log(_apps);
-                // vm.items = _apps;
+                var _types = new Array();
+                 var types = data.value;
+                for (index in types) {
 
-                vm.items = data.value;
-                return data.value;
+                    var temp = {};
+                    temp.id = types[index].id;
+
+                    temp.title = types[index].title;
+                    temp.sha_id = types[index].sha_id;
+                    temp.foods_url = '<a href="/menu-type-foods/' + types[index].sha_id + '">' + types[index].title + '</a>';
+                    temp.type_index = types[index].type_index;
+
+                    _types.push(temp);
+                }
+
+                console.log(_types);
+                vm.items = _types;
+
+               // vm.items = data.value;
+                return vm.items;
             }, function (error_data) {
                 console.log(error_data);
             })

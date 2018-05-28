@@ -1,8 +1,27 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, sessions, redirect, url_for
 from . import main
+from flask_uploads import UploadSet, IMAGES, configure_uploads, ALL
+from flask import request, Flask, redirect, url_for, render_template
 
 from app.model.menuType import *
+
+photos = UploadSet('PHOTO')
+
+@main.route('/photo/<name>')
+def show(name):
+    if name is None:
+        return None
+    url = photos.url(name)
+    return render_template('show.html', url=url, name=name)
+
+
+@main.route('/upload', methods=['POST', 'GET'])
+def upload():
+    if request.method == 'POST' and 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        return redirect(url_for('main.show', name=filename))
+    return render_template('upload.html')
 
 
 @main.route('/', methods=['GET', 'POST'])

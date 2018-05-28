@@ -3,9 +3,12 @@ new Vue({
     el: '#app',
 
     data: {
+        upload_img_url:'',
         search_keyword: '',
         del_check_visible: false,
+        dlg_foods_img_upload_show: false,
         dialogFormVisible: false,
+        food_images_list: [],
         formLabelWidth: '150px',
         dlg_title: '应用信息',
         form: {},
@@ -27,6 +30,35 @@ new Vue({
 
 
     methods: {
+
+        //图片上传
+        onCrateImgDlg: function (row) {
+
+            var vm = this;
+            vm.dlg_foods_img_upload_show = true;
+            console.log(row.sha_id);
+            this.upload_img_url = '/api/v1.0/upload/'+row.sha_id;
+            console.log(row.images);
+            this.food_images_list = row.images;
+        },
+
+        CloseDlg_img_upload: function () {
+
+            this.dlg_foods_img_upload_show = false;
+        },
+        handleRemove: function (file, fileList) {
+            //console.log(file, fileList);
+            console.log(file.response);
+            console.log(fileList);
+
+
+        },
+        handlePreview: function (file) {
+            console.log(file);
+        },
+
+
+        //
 
         dlgOk: function (form) {
             var vm = this;
@@ -77,6 +109,14 @@ new Vue({
 
         switchChange: function (row) {
             console.log(row.states);
+
+            if (row.states == 1) {
+                row.states = 0;
+            } else {
+                row.states = 1;
+            }
+
+            this.updateStates(row.sha_id, row.states);
         },
 
         onCreateDialog: function () {
@@ -126,6 +166,19 @@ new Vue({
                 console.log(error_data);
                 vm.$message.error(error_data.msg.substring(0, 120));
             })
+        },
+
+        updateStates: function (sha_id, state) {
+            //更新状态
+
+            var vm = this;
+            $request.get(vm.apiUrl + '/' + sha_id + '/' + state, null, function (data) {
+                vm.$message(data.msg);
+
+            }, function (error_data) {
+                vm.$message.error(error_data.msg.substring(0, 120));
+            })
+
         },
 
         getFoods: function () {

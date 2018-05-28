@@ -49,10 +49,30 @@ left join `foods` f on mf.`foods_sha_id`=f.sha_id order by m.`type_index` desc,m
 @api.route("/food-type/<menu_sha_id>", methods=['GET'])
 def get_menutype_foods_sha_id(menu_sha_id):
     result = {"code": 10000, "value": "", "msg": ""}
-    sql = """select f.*  from menutype_foods mf left join `menu_type` m on mf.`menu_sha_id` = m.sha_id 
-left join `foods` f on mf.`foods_sha_id`=f.sha_id where m.sha_id = '{menu_sha_id} ' order by mf.`index` """.format(
+    sql = """select mf.sha_id as m_sha_id,f.*,1 as flag  from menutype_foods mf left join `menu_type` m on mf.`menu_sha_id` = m.sha_id 
+left join `foods` f on mf.`foods_sha_id`=f.sha_id where m.sha_id = '{menu_sha_id} ' order by f.states desc, mf.`index` """.format(
         menu_sha_id=menu_sha_id)
 
+    menu_types_foods = dbManager.exec_sql(sql)
+
+    result["value"] = menu_types_foods
+    result["msg"] = "获取数据成功"
+
+    return result
+
+
+@api.route("/food-type/un/<menu_sha_id>", methods=['GET'])
+def get_unMenuType_foods_sha_id(menu_sha_id):
+    """
+    获取非该分类的物品
+    :param menu_sha_id:
+    :return:
+    """
+    result = {"code": 10000, "value": "", "msg": ""}
+    sql = """select f.*,0 as flag  from foods  f where f.sha_id not in (select mf.`foods_sha_id` from `menutype_foods` mf where mf.`menu_sha_id`='{menu_sha_id}')  order by f.food_index""".format(
+        menu_sha_id=menu_sha_id)
+
+    print(sql)
     menu_types_foods = dbManager.exec_sql(sql)
 
     result["value"] = menu_types_foods
@@ -75,6 +95,7 @@ def menutype_foods_add():
     result = {"code": 10000, "value": "", "msg": "添加成功"}
     data = request.data
     data_dict = json.loads(data)
+    print(data_dict)
 
     data_dict['sha_id'] = util.MD5(data_dict['menu_sha_id'] + data_dict['foods_sha_id'])
 
@@ -84,7 +105,8 @@ def menutype_foods_add():
     sql = "INSERT INTO %s (%s) VALUES(%s)" % (__table__,
                                               ",".join(cols), ",".join(["%s"] * len(vals))
                                               )
-
+    print(sql)
+    print(vals)
     try:
         dbManager.add(sql, tuple(vals))
     except Exception as ex:

@@ -69,7 +69,7 @@
                     <div class="grid-content bg-purple">
 
                         <el-button @click="onCreateDialog" class="btn btn-default">
-                            <span class="glyphicon glyphicon-plus"></span> 添加
+                            <span class="glyphicon glyphicon-plus"></span> 新增
                         </el-button>
                         <el-dialog title="配置信息" :visible.sync="dialogFormVisible">
                             <el-form :model="form">
@@ -124,8 +124,13 @@
                 </el-table-column>
 
                 <el-table-column
-                        prop="title"
-                        label="分类名称">
+
+                        label="名称">
+                         <template slot-scope="scope">
+
+                            <span v-html="scope.row.foods_url" ><span>
+                         </template>
+               </el-table-column>
                 </el-table-column>
                 <el-table-column
                         prop="sha_id"

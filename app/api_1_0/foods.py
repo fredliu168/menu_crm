@@ -1,6 +1,8 @@
 import re
 from app import util
 from app.model.menuType import *
+from app.model.image import *
+from app.model.food import *
 from . import api
 import json
 from flask import request
@@ -13,11 +15,26 @@ from flask import request
 @api.route("/food", methods=['GET'])
 def get_foods():
     result = {"code": 10000, "value": "", "msg": ""}
-    sql = """select * from foods t order by t.food_index"""
+    sql = """select * from foods t order by  t.states desc,t.food_index"""
 
-    food = dbManager.exec_sql(sql)
+    food_obj = Food()
+    _foods = dbManager.exec_sql(sql)
 
-    result["value"] = food
+    for food in _foods:
+        # print(food['sha_id'])
+        images = food_obj.getFoodImg(food['sha_id'])
+        #print(images)
+        food['images'] = images
+
+        if len(images) >0:
+            food['primary_img'] = images[0]['url']
+        else:
+            food['primary_img'] = '/api/v1.0/image/default'
+
+
+
+
+    result["value"] = _foods
     result["msg"] = "获取数据成功"
 
     return result
@@ -33,12 +50,13 @@ def enable_foods(sha_id, enable):
     """
     result = {"code": 10000, "value": "", "msg": ""}
 
-    sql = """update foods set states = {state} where sha_id={sha_id}""".format(state=enable, sha_id=sha_id)
+    #sql = """update foods set states = {state} where sha_id='{sha_id}'""".format(state=enable, sha_id=sha_id)
 
-    food = dbManager.exec_sql(sql)
+    #print(sql)
+    dbManager.update('foods',{'states':enable},{'sha_id':sha_id})
 
-    result["value"] = food
-    result["msg"] = "获取数据成功"
+    #result["value"] = food
+    result["msg"] = "更新数据成功"
 
     return result
 

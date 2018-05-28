@@ -29,7 +29,9 @@ CREATE TABLE `foods` (
   `total_num` int(11) NOT NULL DEFAULT '1' COMMENT '总库存',
   `description` varchar(10240) DEFAULT NULL COMMENT '其他描述信息',
   `food_index` int(11) DEFAULT '100' COMMENT '排序',
-  `states` int(11) DEFAULT '1' COMMENT '是否上架销售 0下架 1 上架',
+  `states` tinyint(1) DEFAULT '1' COMMENT '是否上架销售 0下架 1 上架',
+  `pingyin` varchar(128) DEFAULT NULL COMMENT '拼音',
+  `pingyin_short` varchar(20) DEFAULT NULL COMMENT '拼音首字母',
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`),
   KEY `sha_id` (`sha_id`),
@@ -43,6 +45,17 @@ CREATE TABLE `menutype_foods` (
   `foods_sha_id` varchar(32) NOT NULL DEFAULT '' COMMENT '菜品id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单分类对应的菜品';
+
+
+CREATE TABLE `images` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `sha_id` varchar(32) DEFAULT NULL COMMENT '图片哈希值',
+  `path` varchar(512) DEFAULT NULL COMMENT '图片存放路径',
+  `post_time` datetime DEFAULT NULL COMMENT '上传时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sha_id` (`sha_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `restaurant_tables` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
