@@ -24,6 +24,8 @@ class Image(object):
 
 
 
+
+
     def setFoodImg(self, food_sha_id):
         # 保存到物品图片
         self.sha_id = util.MD5(self.path)

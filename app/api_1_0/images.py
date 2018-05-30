@@ -24,7 +24,7 @@ def upload(foods_sha_id):
             image.saveDb()
             image.setFoodImg(foods_sha_id)  # 保存物品对应关系
 
-            result['value'] = filename
+            result['value'] = image.sha_id
         else:
             result['code'] = -10000
             result['msg'] = "上传失败"
@@ -39,7 +39,7 @@ def upload(foods_sha_id):
     return result
 
 
-@api.route("/source/<img_sha_id>")
+@api.route("/source/<img_sha_id>", methods=['GET'])
 def source_img(img_sha_id):
     # 获取资源文件
     image = Image()
@@ -61,6 +61,37 @@ def source_img(img_sha_id):
 
     resp = Response(img_stream, mimetype="image/jpeg")
     return resp
+
+
+@api.route("/source/<img_sha_id>", methods=['DELETE'])
+def delImage(img_sha_id):
+    result = {"code": 10000, "value": "", "msg": "删除成功"}
+    image = Image()
+    path = image.getImg(img_sha_id)
+
+    if path is None:
+        result["code"] = -10000
+        result["msg"] = "图片不存在,删除失败"
+        return result
+
+    img_local_path = "{}/{}".format(current_app.config['UPLOADED_PHOTO_DEST'], path)
+
+    print(img_local_path)
+
+    condition = {'sha_id': img_sha_id}
+
+    try:
+        dbManager.delete('images', condition)
+        os.remove(img_local_path)
+
+    except Exception as ex:
+
+        code, err_message = ex.args
+
+        result['code'] = -10000
+        result['msg'] = err_message
+
+    return result
 
 
 @api.route("/banner")

@@ -3,7 +3,7 @@ new Vue({
     el: '#app',
 
     data: {
-        upload_img_url:'',
+        upload_img_url: '',
         search_keyword: '',
         del_check_visible: false,
         dlg_foods_img_upload_show: false,
@@ -14,6 +14,7 @@ new Vue({
         form: {},
         delItem: {},//要被删除的
         apiUrl: '/api/v1.0/food',
+        apiSource: 'api/v1.0/source',
         items: [{'sql_id': 1}],
         len: 0,
         unit_options: [{ //单位选项
@@ -37,7 +38,7 @@ new Vue({
             var vm = this;
             vm.dlg_foods_img_upload_show = true;
             console.log(row.sha_id);
-            this.upload_img_url = '/api/v1.0/upload/'+row.sha_id;
+            this.upload_img_url = '/api/v1.0/upload/' + row.sha_id;
             console.log(row.images);
             this.food_images_list = row.images;
         },
@@ -46,15 +47,37 @@ new Vue({
 
             this.dlg_foods_img_upload_show = false;
         },
+
+        handleSuccess: function(response, file, fileList){
+             this.getFoods(); //重新获取数据
+            console.log(response);
+             console.log(file.name);
+             file.name = response.value;
+        },
         handleRemove: function (file, fileList) {
             //console.log(file, fileList);
-            console.log(file.response);
+            console.log(file.name);
             console.log(fileList);
+
+            this.delImg(file.name);
 
 
         },
         handlePreview: function (file) {
             console.log(file);
+        },
+
+        delImg: function (img_sha_id) {
+            var vm = this;
+            console.log('删除图片');
+            $request.del(this.apiSource + '/' + img_sha_id, null, function (data) {
+                console.log(data);
+                vm.$message(data.msg);
+                vm.getFoods(); //重新获取数据
+            }, function (error_data) {
+                console.log(error_data);
+                vm.$message.error(error_data.msg.substring(0, 120));
+            })
         },
 
 

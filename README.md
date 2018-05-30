@@ -247,10 +247,24 @@ id int
 title varchar(256) --餐桌名称
 sha_id varchar(32) -- md5(title+number)
 number   int --编号
+```
 
 
+## sysconfig_tb 系统配置表
 
 ```
+id int
+var_name varchar(256) -- 变量名称
+var_value varchar(256) -- 变量值
+description varchar(256) -- 描述需不需
+
+# id   # var_name 变量名       #var_value 值 #description 描述
+1      TABLE_NO                 10  
+
+```
+
+
+
 
 # 当前订单信息
 
